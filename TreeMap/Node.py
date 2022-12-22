@@ -13,7 +13,7 @@ class Node:
     right: object
 
     def __str__(self) -> str:
-        return f'\t\tKey: {self.key}; Color: {self.color}; Parent:{self.parent.key if self.parent is not None else self.parent}\n Left:{self.left.key}\t\t\t Right:{self.right.key}'
+        return f'\t\tKey: {self.key} Val: {self.val}; Color: {self.color}; Parent:{self.parent.key if self.parent is not None else self.parent}\n Left:{self.left.key}\t\t\t Right:{self.right.key}'
 
     def grand_parent(self):
         if self.parent is not None:

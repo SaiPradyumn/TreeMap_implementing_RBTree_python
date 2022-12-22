@@ -55,7 +55,7 @@ class rb_tree:
             position_node = self.search_tree(self.root, key)
             # Since we don't know if the node we got is the left or right child, we compare
             if position_node.key == node.key:
-                position_node.value = val
+                position_node.val = val
                 warning_message = "Duplicate Key: {key} found. Value updated".format(
                     key=node.key)
                 warnings.warn(warning_message, category=SyntaxWarning)
@@ -204,7 +204,11 @@ class rb_tree:
     def delete_node(self, node):
         max_node = node
         max_color = node.color
-
+        # If its an empty root node, we check for all values
+        if node.left.key is None and node.right.key is None and node is self.root:
+            self.root = None
+            del node
+            return
         if node.left.key is None:
             child = node.right
             self.replace(node, node.right)
