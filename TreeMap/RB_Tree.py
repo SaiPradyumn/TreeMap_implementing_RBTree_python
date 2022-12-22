@@ -68,6 +68,7 @@ class rb_tree:
                 position_node.parent.right = node
             node.parent = position_node.parent
         
+        # Case 1
         if node.parent is None:
             node.color = Color.BLACK
             return
@@ -98,11 +99,13 @@ class rb_tree:
         while node.parent.color == Color.RED:
             if node.parent is node.grand_parent().right:
                 uncle = node.uncle()
+                # Case 2
                 if uncle.color == Color.RED:
                     uncle.color = Color.BLACK
                     node.parent.color = Color.BLACK
                     node.grand_parent().color = Color.RED
                     node = node.grand_parent()
+                #  Case 4
                 else:
                     if node is node.parent.left:
                         node = node.parent
@@ -113,11 +116,13 @@ class rb_tree:
                         self.rotate_left(node.grand_parent())
             else:
                 uncle = node.uncle()
+                #  Case 2
                 if uncle.color == Color.RED:
                     uncle.color = Color.BLACK
                     node.parent.color = Color.BLACK
                     node.grand_parent().color = Color.RED
                     node = node.grand_parent()
+                # Case 3
                 else:
                     if node is node.parent.right:
                         node = node.parent
