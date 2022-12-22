@@ -1,8 +1,3 @@
-
-import networkx as nx
-import matplotlib.pyplot as plt
-from networkx.drawing.nx_pydot import graphviz_layout
-
 from TreeMap.RB_Tree import rb_tree
 
 
@@ -105,30 +100,7 @@ class TreeMap:
         self.__tree.poll_last()
     
 
-# To delete before submiting
-if __name__ == "__main__":
-    rb = TreeMap(1,2)
-    for i in range(5,10):
-        rb.put(i,1)
-    # display_graph(rb.root)
-    for i in range(5,0, -1):
-        rb.put(i,1)
-    print(rb)
-    print(rb.get_values())
-    print(rb.size())
-    # for i in range(20):
-        # print(rb.contains_key(i))
-    # print(rb.get(9))
-    print(rb.last_key())
-    print(rb)
-    rb.clear()
-    print(rb)
-    # for i in range(5, 10):
-    #     rb.insert(i, 1)
-    #     # display_graph(rb.root)
-    # for i in range(5, 0, -1):
-    #     rb.insert(i, 1)
-    #     # display_graph(rb.root)
-    # display_graph(rb.root)
-    # rb.delete(3)
-    # display_graph(rb.root)
+    def visaulize_tree(self):
+        self.__tree.display_graph()
+    
+

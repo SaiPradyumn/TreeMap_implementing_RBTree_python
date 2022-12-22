@@ -1,6 +1,9 @@
 from TreeMap.Color import Color
 from TreeMap.Node import Node
 import warnings
+import networkx as nx
+import matplotlib.pyplot as plt
+from networkx.drawing.nx_pydot import graphviz_layout
 
 class rb_tree:
     root: object
@@ -275,3 +278,31 @@ class rb_tree:
     def poll_last(self):
         node = self.last_ele()
         self.delete_node(node)
+    
+
+    def display_graph(self):
+        def create_graph(node,g,colors):
+            if(node.left.key != None):
+                g.add_edge(node.key,node.left.key)
+                colors.append(str(node.left.color)[6:])
+                create_graph(node.left,g,colors)
+            if(node.right.key != None):
+                g.add_edge(node.key,node.right.key)
+                colors.append(str(node.right.color)[6:])
+                create_graph(node.right,g,colors)
+
+        root = self.root
+        if root is not None:
+            if root.key is not None:
+                g = nx.Graph()
+                colors = []
+                colors.append(str(root.color)[6:])
+                create_graph(root,g,colors)
+                g.add_node(root.key)
+                pos = graphviz_layout(g, prog="dot")
+                nx.draw(g, pos,with_labels=True, node_color=colors, font_color="white")
+                plt.show()
+            else:
+                print("Blank Graph")
+        else:
+            print("Empty Tree")
