@@ -8,10 +8,11 @@ from networkx.drawing.nx_pydot import graphviz_layout
 class rb_tree:
     root: object
 
-    # Temporary constructor
+    # Constructor
     def __init__(self, root=None) -> None:
         self.root = root
 
+    # Rotations to fix the tree
     def rotate_left(self, node):
         R_child = node.right
         node.right = R_child.left
@@ -42,6 +43,7 @@ class rb_tree:
         L_child.right = node
         node.parent = L_child
 
+    # Insert a kay value pair into the tree
     def insert(self, key, val)->Node:
         # Create a red node with two black leaves
         node = Node(key, val, Color.RED, None, None, None)
@@ -65,12 +67,11 @@ class rb_tree:
             else:
                 position_node.parent.right = node
             node.parent = position_node.parent
-        # Case 1
+        
         if node.parent is None:
             node.color = Color.BLACK
             return
 
-        # Case 2
         if node.grand_parent() is None:
             return
 
@@ -80,7 +81,6 @@ class rb_tree:
         return self.root
 
     # Reccursive function to insert a node like a binary search tree
-
     def search_tree(self, node, search_key) -> Node:
         # Since in rb trees we also insert None nodes after each node, we need to
         # check if key of the node is none or if a duplicate key is present
@@ -92,41 +92,36 @@ class rb_tree:
 
         return self.search_tree(node.left, search_key)
 
+    # This function performs various rotations and color changes to 
+    # Balance the tree after insertion
     def fix(self, node):
-        # Case 2 condition
         while node.parent.color == Color.RED:
             if node.parent is node.grand_parent().right:
                 uncle = node.uncle()
-                # Case 3
                 if uncle.color == Color.RED:
                     uncle.color = Color.BLACK
                     node.parent.color = Color.BLACK
                     node.grand_parent().color = Color.RED
                     node = node.grand_parent()
                 else:
-                    # Case 4 pt 2
                     if node is node.parent.left:
                         node = node.parent
                         self.rotate_right(node)
-                    # Case 5 pt 2
                     else:
                         node.parent.color = Color.BLACK
                         node.grand_parent().color = Color.RED
                         self.rotate_left(node.grand_parent())
             else:
                 uncle = node.uncle()
-                # Case 3
                 if uncle.color == Color.RED:
                     uncle.color = Color.BLACK
                     node.parent.color = Color.BLACK
                     node.grand_parent().color = Color.RED
                     node = node.grand_parent()
                 else:
-                    # Case 4 pt 1
                     if node is node.parent.right:
                         node = node.parent
                         self.rotate_left(node)
-                    # Case 5 pt 1
                     else:
                         node.parent.color = Color.BLACK
                         node.grand_parent().color = Color.RED
@@ -135,11 +130,14 @@ class rb_tree:
                 break
         self.root.color = Color.BLACK
 
+    # Used to get the maximum value in a subtree.
+    # We use it to get the in-order successor for deletion
     def maximum(self, node):
         while(node.right.key is not None):
             node = node.right
         return node
 
+    # Fixes tree after deletion
     def fix_delete(self, node):
         while node is not self.root and node.color == Color.BLACK:
             # If node is the left child
@@ -192,6 +190,9 @@ class rb_tree:
 
         node.color = Color.BLACK
 
+    # Replace the current node with its child
+    # If there are two children, we replace the node with
+    # its in-order successor. Else, we just replace it with it child
     def replace(self, node, child):
         if node.parent is None:
             self.root = child
@@ -233,6 +234,7 @@ class rb_tree:
         if max_color == Color.BLACK:
             self.fix_delete(child)
 
+    # Check if the key given is a valid one
     def delete(self, key):
         node = self.search_tree(self.root, key)
         if node.key is None:
@@ -241,6 +243,7 @@ class rb_tree:
             self.delete_node(node)
 
 
+    # To get the in-order list of nodes after traversal
     def tree_traversal(self):
         order_list = []
         def inorder_traversal(node):
@@ -253,6 +256,7 @@ class rb_tree:
         inorder_traversal(self.root)
         return order_list
 
+    # Get left-most element of the tree
     def first_ele(self):
         node = self.root
         if node is not None:
@@ -261,6 +265,7 @@ class rb_tree:
                     node = node.left
         return node
     
+    # Get right-most element of the tree
     def last_ele(self):
         node = self.root
         if node is not None:
@@ -269,21 +274,25 @@ class rb_tree:
                     node = node.right
         return node
 
+    # Delete all elements from the tree
     def clear_tree(self):
         obj_list = self.tree_traversal()
         for i in obj_list:
             del i
         self.root = None
     
+    # Remove first element and print it
     def poll_first(self):
         node = self.first_ele()
         self.delete_node(node)
     
+    # Remove las element and print it
     def poll_last(self):
         node = self.last_ele()
         self.delete_node(node)
     
 
+    # Visualize the tree
     def display_graph(self):
         def create_graph(node,g,colors):
             if(node.left.key != None):
