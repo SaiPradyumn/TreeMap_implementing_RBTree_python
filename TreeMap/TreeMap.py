@@ -140,7 +140,7 @@ class TreeMap:
             self.__tree.poll_last()
         return None
 
-    def visaulize_tree(self):
+    def visualize_tree(self):
         self.__tree.display_graph()
     
 
